@@ -19,7 +19,10 @@ IfNotExist, %A_LocalAppData%\Programs\Window position manager
 }
 
 global IniFile := A_LocalAppData "\Programs\Window position manager\Saved windows.ini"
-Menu, Tray, Icon, Icons\shell32_3.ico
+if not A_IsCompiled
+{
+    Menu, Tray, Icon, shell32_3.ico
+}
 
 if not A_IsAdmin
 {
