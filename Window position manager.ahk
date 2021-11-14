@@ -28,7 +28,7 @@ if not A_IsCompiled
 ;@Ahk2Exe-Obey U_type, = "%A_IsUnicode%" ? "Unicode" : "ANSI"
 ;@Ahk2Exe-ExeName %A_ScriptName~\.[^\.]+$%_%U_type%_%U_bits%
 
-;@Ahk2Exe-SetMainIcon cmd_IDI_APPICON.ico
+;@Ahk2Exe-SetMainIcon shell32_3.ico
 
 if not A_IsAdmin
 {
