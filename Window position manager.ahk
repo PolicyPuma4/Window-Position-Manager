@@ -19,10 +19,16 @@ IfNotExist, %A_LocalAppData%\Programs\Window position manager
 }
 
 global IniFile := A_LocalAppData "\Programs\Window position manager\Saved windows.ini"
+
 if not A_IsCompiled
 {
     Menu, Tray, Icon, shell32_3.ico
 }
+;@Ahk2Exe-Obey U_bits, = %A_PtrSize% * 8
+;@Ahk2Exe-Obey U_type, = "%A_IsUnicode%" ? "Unicode" : "ANSI"
+;@Ahk2Exe-ExeName %A_ScriptName~\.[^\.]+$%_%U_type%_%U_bits%
+
+;@Ahk2Exe-SetMainIcon cmd_IDI_APPICON.ico
 
 if not A_IsAdmin
 {
