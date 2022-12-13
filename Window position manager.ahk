@@ -9,35 +9,6 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #Persistent
 #SingleInstance Force
 
-EnvGet, A_LocalAppData, LocalAppData
-global A_LocalAppData := A_LocalAppData
-
-IfNotExist, %A_LocalAppData%\Programs\Window position manager
-{
-    FileCreateDir, %A_LocalAppData%\Programs\Window position manager
-    FileAppend,, %A_LocalAppData%\Programs\Window position manager\Saved windows.ini
-}
-
-global IniFile := A_LocalAppData "\Programs\Window position manager\Saved windows.ini"
-Menu, Tray, Icon, Icons\shell32_3.ico
-
-if not A_IsAdmin
-{
-    try
-    {
-        if A_IsCompiled
-        {
-            Run *RunAs "%A_ScriptFullPath%"
-        }
-        else
-        {
-            Run *RunAs "%A_AhkPath%" "%A_ScriptFullPath%"
-        }
-    }
-    ExitApp
-}
-
-
 SaveWindow()
 {
     Window := SelectWindow()
@@ -91,16 +62,42 @@ RestoreWindow()
 
 SelectWindow()
 {
-    KeyWait LButton, D
-    KeyWait LButton
+    ih := InputHook("", all_keys)
+    ih.Start()
+    ih.Wait()
+
+    if (ih.EndReason != "EndKey")
+        return
+
+    if (ih.EndKey == "Escape")
+        return
+
     MouseGetPos,,, Window
     return Window
 }
 
+EnvGet, A_LocalAppData, LocalAppData
+global A_LocalAppData := A_LocalAppData
 
+IfNotExist, %A_LocalAppData%\Programs\Window position manager
+{
+    FileCreateDir, %A_LocalAppData%\Programs\Window position manager
+    FileAppend,, %A_LocalAppData%\Programs\Window position manager\Saved windows.ini
+}
+
+global IniFile := A_LocalAppData "\Programs\Window position manager\Saved windows.ini"
+global all_keys
+
+Loop, 255
+{
+	all_keys := all_keys "{" Format("vk{:02x}", A_Index) "}"
+}
+
+Menu, Tray, Icon, shell32_3.ico
 Menu, Tray, Add
 Menu, Tray, Add, Save window, MenuHandler
 Menu, Tray, Add, Restore window, MenuHandler
+return
 
 MenuHandler:
 if (A_ThisMenuItem = "Save window")
