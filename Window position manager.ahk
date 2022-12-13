@@ -9,6 +9,12 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #Persistent
 #SingleInstance Force
 
+;@Ahk2Exe-Obey U_bits, = %A_PtrSize% * 8
+;@Ahk2Exe-Obey U_type, = "%A_IsUnicode%" ? "Unicode" : "ANSI"
+;@Ahk2Exe-ExeName %A_ScriptName~\.[^\.]+$%_%U_type%_%U_bits%
+
+;@Ahk2Exe-SetMainIcon shell32_3.ico
+
 SaveWindow()
 {
     Window := SelectWindow()
@@ -93,7 +99,9 @@ Loop, 255
 	all_keys := all_keys "{" Format("vk{:02x}", A_Index) "}"
 }
 
-Menu, Tray, Icon, shell32_3.ico
+if (not A_IsCompiled)
+    Menu, Tray, Icon, shell32_3.ico
+
 Menu, Tray, Add
 Menu, Tray, Add, Save window, MenuHandler
 Menu, Tray, Add, Restore window, MenuHandler
