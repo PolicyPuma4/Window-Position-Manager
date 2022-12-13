@@ -102,7 +102,9 @@ Loop, 255
 if (not A_IsCompiled)
     Menu, Tray, Icon, shell32_3.ico
 
+Menu, Tray, Tip, % "Select an option, hover your cursor over any window and then press any button on your keyboard`nPress escape to cancel"
 Menu, Tray, Add
+Menu, Tray, Add, Open config, MenuHandler
 Menu, Tray, Add, Save window, MenuHandler
 Menu, Tray, Add, Restore window, MenuHandler
 return
@@ -111,9 +113,18 @@ MenuHandler:
 if (A_ThisMenuItem = "Save window")
 {
     SaveWindow()
+    return
 }
-else if (A_ThisMenuItem = "Restore window")
+
+if (A_ThisMenuItem = "Restore window")
 {
     RestoreWindow()
+    return
+}
+
+if (A_ThisMenuItem = "Open config")
+{
+    Run, % "notepad.exe " IniFile, %A_LocalAppData%\Programs\Window position manager
+    return
 }
 return
