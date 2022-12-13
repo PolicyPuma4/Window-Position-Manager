@@ -1,5 +1,5 @@
 ; Created by https://github.com/PolicyPuma4
-; Repository https://github.com/PolicyPuma4/Window-position-manager
+; Repository https://github.com/PolicyPuma4/Window-Position-Manager
 
 #NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 ; #Warn  ; Enable warnings to assist with detecting common errors.
@@ -85,13 +85,13 @@ SelectWindow()
 EnvGet, A_LocalAppData, LocalAppData
 global A_LocalAppData := A_LocalAppData
 
-IfNotExist, %A_LocalAppData%\Programs\Window position manager
+IfNotExist, %A_LocalAppData%\Programs\Window Position Manager
 {
-    FileCreateDir, %A_LocalAppData%\Programs\Window position manager
-    FileAppend,, %A_LocalAppData%\Programs\Window position manager\Saved windows.ini
+    FileCreateDir, %A_LocalAppData%\Programs\Window Position Manager
+    FileAppend,, %A_LocalAppData%\Programs\Window Position Manager\Saved Windows.ini
 }
 
-global IniFile := A_LocalAppData "\Programs\Window position manager\Saved windows.ini"
+global IniFile := A_LocalAppData "\Programs\Window Position Manager\Saved Windows.ini"
 global all_keys
 
 Loop, 255
@@ -104,7 +104,7 @@ if (not A_IsCompiled)
 
 Menu, Tray, Tip, % "Select an option, hover your cursor over any window and then press any button on your keyboard`nPress escape to cancel"
 Menu, Tray, Add
-Menu, Tray, Add, Open config, MenuHandler
+Menu, Tray, Add, % "Edit saved windows", MenuHandler
 Menu, Tray, Add, Save window, MenuHandler
 Menu, Tray, Add, Restore window, MenuHandler
 return
@@ -122,9 +122,9 @@ if (A_ThisMenuItem = "Restore window")
     return
 }
 
-if (A_ThisMenuItem = "Open config")
+if (A_ThisMenuItem = "Edit saved windows")
 {
-    Run, % "notepad.exe " IniFile, %A_LocalAppData%\Programs\Window position manager
+    Run, % "notepad.exe " IniFile, %A_LocalAppData%\Programs\Window Position Manager
     return
 }
 return
