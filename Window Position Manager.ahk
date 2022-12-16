@@ -9,7 +9,7 @@
 
 ;@Ahk2Exe-SetMainIcon shell32_3.ico
 if not A_IsCompiled
-    TraySetIcon("shell32_3.ico")
+    TraySetIcon "shell32_3.ico"
 
 Persistent
 
@@ -43,8 +43,8 @@ EditSavedWindows(*)
 SelectWindow()
 {
     ih := InputHook("", all_keys)
-    ih.Start()
-    ih.Wait()
+    ih.Start
+    ih.Wait
 
     if not ih.EndReason = "EndKey"
         return
