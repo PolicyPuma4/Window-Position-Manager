@@ -29,6 +29,10 @@ Loop 255
     all_keys := all_keys "{" Format("vk{:02x}", A_Index) "}"
 }
 
+exceptions := Map(
+    "chrome.exe", "Picture-in-picture",
+)
+
 A_IconTip := "Select an option, hover your cursor over any window and then press any button on your keyboard`nPress escape to cancel"
 A_TrayMenu.Add
 A_TrayMenu.Add "Edit saved windows", EditSavedWindows
@@ -56,13 +60,28 @@ SelectWindow()
     return window
 }
 
-SaveWindow(*) {
+GetProcessName(window)
+{
+    process_name := WinGetProcessName(window)
+    has_exception := exceptions.Get(process_name, "")
+    if not has_exception
+        return process_name
+
+    window_title := WinGetTitle(window)
+    if not has_exception = window_title
+        return process_name
+
+    return process_name " " window_title
+}
+
+SaveWindow(*)
+{
     window := SelectWindow()
     if not window
         return
 
     window_state := WinGetMinMax(window)
-    process_name := WinGetProcessName(window)
+    process_name := GetProcessName(window)
     if window_state
     {
         IniWrite true, saved_windows_path, process_name, "max"
@@ -77,12 +96,13 @@ SaveWindow(*) {
     IniWrite height, saved_windows_path, process_name, "height"
 }
 
-RestoreWindow(*) {
+RestoreWindow(*)
+{
     window := SelectWindow()
     if not window
         return
 
-    process_name := WinGetProcessName(window)
+    process_name := GetProcessName(window)
     saved_window_state := IniRead(saved_windows_path, process_name, "max", "")
     if saved_window_state
     {
