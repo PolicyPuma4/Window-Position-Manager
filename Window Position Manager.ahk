@@ -31,6 +31,7 @@ Loop 255
 
 exceptions := Map(
     "chrome.exe", "Picture-in-picture",
+    "firefox.exe", "Picture-in-Picture"
 )
 
 A_IconTip := "Select an option, hover your cursor over any window and then press any button on your keyboard`nPress escape to cancel"
