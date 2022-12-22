@@ -9,19 +9,19 @@
 
 ;@Ahk2Exe-SetMainIcon shell32_3.ico
 if not A_IsCompiled
-    TraySetIcon "shell32_3.ico"
+    TraySetIcon("shell32_3.ico")
 
-Persistent
+Persistent()
 
 A_LocalAppData := EnvGet("LOCALAPPDATA")
 
 app_dir_path := A_LocalAppData "\Programs\Window Position Manager"
 if not DirExist(app_dir_path)
-    DirCreate app_dir_path
+    DirCreate(app_dir_path)
 
 saved_windows_path := app_dir_path "\Saved Windows.ini"
 if not FileExist(saved_windows_path)
-    FileAppend "", saved_windows_path
+    FileAppend("", saved_windows_path)
 
 all_keys := ""
 Loop 255
@@ -35,21 +35,21 @@ exceptions := Map(
 )
 
 A_IconTip := "Select an option, hover your cursor over any window and then press any button on your keyboard`nPress escape to cancel"
-A_TrayMenu.Add
-A_TrayMenu.Add "Edit saved windows", EditSavedWindows
-A_TrayMenu.Add "Save window", SaveWindow
-A_TrayMenu.Add "Restore window", RestoreWindow
+A_TrayMenu.Add()
+A_TrayMenu.Add("Edit saved windows", EditSavedWindows)
+A_TrayMenu.Add("Save window", SaveWindow)
+A_TrayMenu.Add("Restore window", RestoreWindow)
 
 EditSavedWindows(*)
 {
-    Run "notepad.exe " saved_windows_path, app_dir_path
+    Run("notepad.exe " saved_windows_path, app_dir_path)
 }
 
 SelectWindow()
 {
     ih := InputHook("", all_keys)
-    ih.Start
-    ih.Wait
+    ih.Start()
+    ih.Wait()
 
     if not ih.EndReason = "EndKey"
         return
@@ -57,7 +57,7 @@ SelectWindow()
     if ih.EndKey = "Escape"
         return
 
-    MouseGetPos ,, &window
+    MouseGetPos(,, &window)
     return window
 }
 
@@ -85,16 +85,16 @@ SaveWindow(*)
     process_name := GetProcessName(window)
     if window_state
     {
-        IniWrite true, saved_windows_path, process_name, "max"
+        IniWrite(true, saved_windows_path, process_name, "max")
         return
     }
 
-    IniWrite false, saved_windows_path, process_name, "max"
-    WinGetPos &x, &y, &width, &height, window
-    IniWrite x, saved_windows_path, process_name, "x"
-    IniWrite y, saved_windows_path, process_name, "y"
-    IniWrite width, saved_windows_path, process_name, "width"
-    IniWrite height, saved_windows_path, process_name, "height"
+    IniWrite(false, saved_windows_path, process_name, "max")
+    WinGetPos(&x, &y, &width, &height, window)
+    IniWrite(x, saved_windows_path, process_name, "x")
+    IniWrite(y, saved_windows_path, process_name, "y")
+    IniWrite(width, saved_windows_path, process_name, "width")
+    IniWrite(height, saved_windows_path, process_name, "height")
 }
 
 RestoreWindow(*)
@@ -109,7 +109,7 @@ RestoreWindow(*)
     {
         window_state := WinGetMinMax(window)
         if not window_state
-            WinMaximize window
+            WinMaximize(window)
 
         return
     }
@@ -123,7 +123,7 @@ RestoreWindow(*)
 
     window_state := WinGetMinMax(window)
     if window_state
-        WinRestore window
+        WinRestore(window)
 
-    WinMove saved_x, saved_y, saved_width, saved_height, window
+    WinMove(saved_x, saved_y, saved_width, saved_height, window)
 }
